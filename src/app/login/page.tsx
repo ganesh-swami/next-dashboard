@@ -12,7 +12,7 @@ const Login = () => {
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
-      router.replace("/dashboard");
+      router.replace("/customer");
     }
   }, [sessionStatus, router]);
 
@@ -44,7 +44,7 @@ const Login = () => {
 
     if (res?.error) {
       setError("Invalid email or password");
-      if (res?.url) router.replace("/dashboard");
+      if (res?.url) router.replace("/customer");
     } else {
       setError("");
     }
@@ -58,7 +58,9 @@ const Login = () => {
     sessionStatus !== "authenticated" && (
       <div className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="bg-[#212121] p-8 rounded shadow-md w-96">
-          <h1 className="text-4xl text-center font-semibold mb-8">Login</h1>
+          <h1 className="text-4xl text-center text-white font-semibold mb-8">
+            Login
+          </h1>
           <form onSubmit={handleSubmit}>
             <input
               type="text"
@@ -81,7 +83,7 @@ const Login = () => {
             </button>
             <p className="text-red-600 text-[16px] mb-4">{error && error}</p>
           </form>
-          <button
+          {/* <button
             className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
             onClick={() => {
               signIn("github");
@@ -95,7 +97,7 @@ const Login = () => {
             href="/register"
           >
             Register Here
-          </Link>
+          </Link> */}
         </div>
       </div>
     )
