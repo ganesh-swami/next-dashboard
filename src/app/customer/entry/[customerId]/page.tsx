@@ -133,7 +133,7 @@ export default function CustomerEntries({
         return acc + entry.totalAmount;
       }, 0);
       setRemaingTotalAmount(totalAmount);
-      console.log(totalAmount);
+      // console.log(totalAmount);
     }
   }, [entries]);
 
