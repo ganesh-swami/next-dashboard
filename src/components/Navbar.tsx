@@ -12,9 +12,9 @@ const Navbar = () => {
         <div className="flex gap-10">
           {!session ? (
             <>
-              <Link href="/login">
+              {/* <Link href="/login">
                 <li>Login</li>
-              </Link>
+              </Link> */}
               {/* <Link href="/register">
                 <li>Register</li>
               </Link> */}
