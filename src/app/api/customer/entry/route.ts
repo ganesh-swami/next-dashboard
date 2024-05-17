@@ -49,6 +49,7 @@ export const POST = async (request: Request) => {
                 totalAmount,
                 customerId,
                 isDeposit,
+                date,
                 details,
             } = await request.json();
         
@@ -59,6 +60,7 @@ export const POST = async (request: Request) => {
             totalAmount,
             customerId,
             isDeposit,
+            date,
             details,
         });
 

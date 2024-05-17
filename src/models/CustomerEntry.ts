@@ -18,6 +18,10 @@ const customerEntrySchema = new Schema(
       type: Number,
       required: true,
     },
+    date: {
+      type: Date,
+      required: true,
+    },
     customerId: {
       type: Schema.Types.ObjectId,
       ref: "Customer",

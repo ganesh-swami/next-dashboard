@@ -99,6 +99,10 @@ const Login = () => {
             Register Here
           </Link> */}
         </div>
+        <div className="footer">
+          Developed and maintained by{" "}
+          <a href="https://avinyaweb.com">avinyaweb</a>
+        </div>
       </div>
     )
   );
