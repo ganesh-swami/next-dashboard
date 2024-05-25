@@ -201,7 +201,7 @@ export default function CustomerEntries({
       </div>
       {isLoading ? (
         <p>Loading...</p>
-      ) : entries.length === 0 ? (
+      ) : !addNew && entries.length === 0 ? (
         <p>No entries found for the selected customer and month.</p>
       ) : (
         <table className="min-w-full">
@@ -211,7 +211,7 @@ export default function CustomerEntries({
                 Date
               </th>
               <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Item
+                Name
               </th>
               <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total Item
