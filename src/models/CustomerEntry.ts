@@ -11,6 +11,9 @@ const customerEntrySchema = new Schema(
     totalItem: {
       type: Number,
     },
+    weight:{
+      type: Number,
+    },
     rate: {
       type: Number,
     },

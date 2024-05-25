@@ -55,6 +55,9 @@ export default function CustomerList() {
               Name
             </th>
             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              View
+            </th>
+            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Email
             </th>
             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -63,20 +66,12 @@ export default function CustomerList() {
             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Details
             </th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              View
-            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {customers.map((customer) => (
             <tr key={customer._id}>
               <td className="px-4 py-2 whitespace-nowrap">{customer.name}</td>
-              <td className="px-4 py-2 whitespace-nowrap">{customer.email}</td>
-              <td className="px-4 py-2 whitespace-nowrap">{customer.phone}</td>
-              <td className="px-4 py-2 whitespace-nowrap">
-                {customer.details}
-              </td>
               <td className="px-4 py-2 whitespace-nowrap">
                 <button
                   onClick={() => viewCustomerEntry(customer._id)}
@@ -84,6 +79,11 @@ export default function CustomerList() {
                 >
                   view
                 </button>
+              </td>
+              <td className="px-4 py-2 whitespace-nowrap">{customer.email}</td>
+              <td className="px-4 py-2 whitespace-nowrap">{customer.phone}</td>
+              <td className="px-4 py-2 whitespace-nowrap">
+                {customer.details}
               </td>
             </tr>
           ))}

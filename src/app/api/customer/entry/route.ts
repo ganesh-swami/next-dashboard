@@ -45,6 +45,7 @@ export const POST = async (request: Request) => {
             const {
                 item,
                 totalItem,
+                weight,
                 rate,
                 totalAmount,
                 customerId,
@@ -56,6 +57,7 @@ export const POST = async (request: Request) => {
         const customerEntry = new CustomerEntry({
             item,
             totalItem,
+            weight,
             rate,
             totalAmount,
             customerId,
