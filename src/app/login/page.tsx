@@ -56,8 +56,8 @@ const Login = () => {
 
   return (
     sessionStatus !== "authenticated" && (
-      <div className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="bg-[#212121] p-8 rounded shadow-md w-96">
+      <div className="flex min-h-screen flex-col items-center justify-between p-2 md:p-24">
+        <div className="bg-[#212121] p-8 rounded shadow-md w-full md:w-96">
           <h1 className="text-4xl text-center text-white font-semibold mb-8">
             Login
           </h1>

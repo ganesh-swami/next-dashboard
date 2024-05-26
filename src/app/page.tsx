@@ -35,12 +35,12 @@ export default function Home() {
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           {/* Add Hero Images Here */}
         </div>
-      </div>
-      <div>
-        developed and maintained by{" "}
-        <a href="https://avinyaweb.com/" className="text-blue-500">
-          avinyaweb
-        </a>
+        <div className="mt-32 text-center">
+          developed and maintained by{" "}
+          <a href="https://avinyaweb.com/" className="text-blue-500">
+            avinyaweb
+          </a>
+        </div>
       </div>
     </main>
   );

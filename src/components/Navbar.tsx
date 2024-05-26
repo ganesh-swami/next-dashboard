@@ -2,10 +2,12 @@
 import React from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+// import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const { data: session }: any = useSession();
-  console.log(session);
+  // const router = useRouter();
+  // console.log(session);
   return (
     <div className="mt-4 mb-8">
       <ul className="flex justify-between item-center">
@@ -32,7 +34,7 @@ const Navbar = () => {
           {session ? (
             <button
               onClick={() => {
-                signOut();
+                signOut({ callbackUrl: "/login" });
               }}
               className="p-2 px-5 -mt-1 bg-red-600 hover:bg-red-800 text-white rounded-full"
             >
