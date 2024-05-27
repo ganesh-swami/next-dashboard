@@ -9,7 +9,7 @@ const Navbar = () => {
   // const router = useRouter();
   // console.log(session);
   return (
-    <div className="mt-4 mb-8">
+    <div className="mt-4 mb-8 noPrint">
       <ul className="flex justify-between item-center">
         <div className="flex gap-10">
           {!session ? (

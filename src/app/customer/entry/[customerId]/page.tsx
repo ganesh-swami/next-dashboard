@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { set } from "mongoose";
 
 interface CustomerEntry {
   _id: string;
@@ -18,6 +19,11 @@ interface CustomerEntry {
   date: string;
 }
 
+interface Customer {
+  _id: string;
+  name: string;
+}
+
 export default function CustomerEntries({
   params,
 }: {
@@ -29,8 +35,11 @@ export default function CustomerEntries({
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [totalRemaingAmount, setRemaingTotalAmount] = useState(0);
   const [addNew, setAddNew] = useState(false);
-
   const customerId = params.customerId as string;
+  const [customer, setCustomer] = useState<Customer>({
+    _id: customerId,
+    name: "",
+  });
   const [date, setDate] = useState<string>("");
   const [item, setItem] = useState("");
   const [totalItem, setTotalItem] = useState<number>(0);
@@ -118,9 +127,11 @@ export default function CustomerEntries({
       const response = await axios.get(
         `/api/customer/entry/?customerId=${customerId}&month=${selectedMonth}`
       );
-      setEntries(response.data);
+      setEntries(response.data.customerEntries);
+      setCustomer(response.data.customer);
     } catch (error) {
       console.error("Error fetching customer entries:", error);
+      toast.error("Error fetching customer entries");
     } finally {
       setIsLoading(false);
     }
@@ -149,18 +160,32 @@ export default function CustomerEntries({
     setSelectedMonth(parseInt(event.target.value));
   };
 
-  const handleAdd = () => {
-    const customerId = params.customerId;
-
-    if (customerId) {
-      router.push(`/customer/entry/create?customerId=${customerId}`);
+  const handleDelete = async (_id: string) => {
+    try {
+      var result = confirm("Want to delete?");
+      if (result) {
+        //Logic to delete the item
+        const response = await axios.patch(`/api/customer/entry/`, {
+          _id: _id,
+        });
+        toast.success("Entry deleted successfully!");
+        fetchEntries();
+      }
+    } catch (error) {
+      toast.error("Error deleting entries");
     }
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4 text-center">Customer Entries</h1>
-      <div className="mb-4">
+      <h1 className="text-2xl font-bold mb-12 text-center text-gray-700">
+        {customer && customer.name ? customer.name : ""}
+      </h1>
+      <div className="mb-4 noPrint">
         <div className="flex flex-row justify-between">
           <div className="">
             <button
@@ -212,154 +237,202 @@ export default function CustomerEntries({
       ) : !addNew && entries.length === 0 ? (
         <p>No entries found for the selected customer and month.</p>
       ) : (
-        <table className="min-w-full">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Weight
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Nag
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Rate
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Total Amount
-              </th>
-              {/* <th className="px-4 py-2 text-left">Details</th> */}
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {addNew && (
-              <tr>
-                {/* <form> */}
-                <td className=" whitespace-nowrap">
-                  <input
-                    type="date"
-                    id="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-2 py-1 rounded-md"
-                    required
-                  />
-                </td>
-                <td className="whitespace-nowrap">
-                  <input
-                    type="text"
-                    id="item"
-                    value={item}
-                    onChange={(e) => setItem(e.target.value)}
-                    className="w-32 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
-                    required
-                  />
-                </td>
-                <td className=" whitespace-nowrap">
-                  {!isDeposit && (
-                    <input
-                      type="number"
-                      id="weight"
-                      value={weight}
-                      onChange={(e) => handleWeight(e)}
-                      className="w-20 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
-                      required={extraFieldRequired}
-                      disabled={isDeposit}
-                    />
-                  )}
-                </td>
-                <td className=" whitespace-nowrap">
-                  {!isDeposit && (
-                    <input
-                      type="number"
-                      id="totalItem"
-                      value={totalItem}
-                      onChange={(e) => handleTotalItem(e)}
-                      className="w-20 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
-                      required={extraFieldRequired}
-                      disabled={isDeposit}
-                    />
-                  )}
-                </td>
-                <td className=" whitespace-nowrap">
-                  {!isDeposit && (
-                    <input
-                      type="number"
-                      id="rate"
-                      value={rate}
-                      onChange={(e) => handleRateChange(e)}
-                      className="w-20 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
-                      required={extraFieldRequired}
-                      disabled={isDeposit}
-                    />
-                  )}
-                </td>
-                <td className="w-40 whitespace-nowrap">
-                  <input
-                    type="number"
-                    id="totalAmount"
-                    value={totalAmount}
-                    onChange={(e) => setTotalAmount(parseFloat(e.target.value))}
-                    className="w-24 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
-                    required
-                  />
-                  <button
-                    onClick={handleSubmit}
-                    className={
-                      (isDeposit ? "bg-red-500" : "bg-indigo-500") +
-                      " w-15 text-sm mx-1 px-2 py-2  text-white rounded-md focus:outline-none"
-                    }
+        <>
+          <div className="overflow-x-scroll">
+            <table className="min-w-full">
+              <thead>
+                <tr className="bg-gray-100 border border-slate-200">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Weight
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Nag
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Rate
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Total Amount
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider noPrint">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200 border border-slate-200">
+                {addNew && (
+                  <tr className="noPrint">
+                    {/* <form> */}
+                    <td className=" whitespace-nowrap">
+                      <input
+                        type="date"
+                        id="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        className="w-full px-2 py-1 rounded-md"
+                        required
+                      />
+                    </td>
+                    <td className="whitespace-nowrap">
+                      <input
+                        type="text"
+                        id="item"
+                        value={item}
+                        onChange={(e) => setItem(e.target.value)}
+                        className="w-32 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
+                        required
+                      />
+                    </td>
+                    <td className=" whitespace-nowrap">
+                      {!isDeposit && (
+                        <input
+                          type="number"
+                          id="weight"
+                          value={weight}
+                          onChange={(e) => handleWeight(e)}
+                          className="w-20 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
+                          required={extraFieldRequired}
+                          disabled={isDeposit}
+                        />
+                      )}
+                    </td>
+                    <td className=" whitespace-nowrap">
+                      {!isDeposit && (
+                        <input
+                          type="number"
+                          id="totalItem"
+                          value={totalItem}
+                          onChange={(e) => handleTotalItem(e)}
+                          className="w-20 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
+                          required={extraFieldRequired}
+                          disabled={isDeposit}
+                        />
+                      )}
+                    </td>
+                    <td className=" whitespace-nowrap">
+                      {!isDeposit && (
+                        <input
+                          type="number"
+                          id="rate"
+                          value={rate}
+                          onChange={(e) => handleRateChange(e)}
+                          className="w-20 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
+                          required={extraFieldRequired}
+                          disabled={isDeposit}
+                        />
+                      )}
+                    </td>
+                    <td className="w-40 whitespace-nowrap">
+                      <input
+                        type="number"
+                        id="totalAmount"
+                        value={totalAmount}
+                        onChange={(e) =>
+                          setTotalAmount(parseFloat(e.target.value))
+                        }
+                        className="w-24 px-2 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
+                        required
+                      />
+                    </td>
+                    <td className="w-40 whitespace-nowrap text-center">
+                      <button
+                        onClick={handleSubmit}
+                        className={
+                          (isDeposit ? "bg-red-500" : "bg-indigo-500") +
+                          " w-15 text-sm px-4 py-2  text-white rounded-md focus:outline-none"
+                        }
+                      >
+                        {isLoadingAdd ? "..." : isDeposit ? "deposit" : "save"}
+                      </button>
+                    </td>
+                    {/* </form> */}
+                  </tr>
+                )}
+                {entries.map((entry) => (
+                  <tr key={entry._id}>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {entry.date && new Date(entry.date).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {entry.item}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {entry.weight > 0 ? entry.weight : ""}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {entry.totalItem > 0 ? entry.totalItem : ""}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {entry.rate > 0 ? entry.rate : ""}
+                    </td>
+                    <td
+                      className={
+                        (entry.isDeposit ? "text-blue-700 font-bold " : "") +
+                        "px-4 py-2 whitespace-nowrap border border-slate-200"
+                      }
+                    >
+                      {entry.isDeposit ? "-" : ""}
+                      {entry.totalAmount}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap noPrint">
+                      <button
+                        onClick={() => handleDelete(entry._id)}
+                        className="bg-red-600 text-sm hover:bg-red-800 text-white font-bold py-2 px-4 rounded-md"
+                      >
+                        <svg
+                          className="w-4 h-4 text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          {" "}
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                          />{" "}
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-6 py-2 font-bold border border-slate-200"
                   >
-                    {isLoadingAdd ? "..." : isDeposit ? "deposit" : "save"}
-                  </button>
-                </td>
-                {/* </form> */}
-              </tr>
-            )}
-            {entries.map((entry) => (
-              <tr key={entry._id}>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  {entry.date && new Date(entry.date).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">{entry.item}</td>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  {entry.weight > 0 ? entry.weight : ""}
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  {entry.totalItem > 0 ? entry.totalItem : ""}
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  {entry.rate > 0 ? entry.rate : ""}
-                </td>
-                <td
-                  className={
-                    entry.isDeposit
-                      ? "bg-blue-500 text-white"
-                      : "bg-white" + "px-4 py-2 whitespace-nowrap"
-                  }
-                >
-                  {entry.totalAmount}
-                </td>
-              </tr>
-            ))}
-            <tr>
-              <td
-                colSpan={5}
-                className="px-6 py-2 font-bold border border-slate-200"
-              >
-                Total Remaining Amount:
-              </td>
-              <td className="px-4 py-2 font-bold border border-slate-200">
-                {totalRemaingAmount}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                    Total Remaining Amount:
+                  </td>
+                  <td
+                    colSpan={2}
+                    className="px-4 py-2 font-bold border border-slate-200"
+                  >
+                    {totalRemaingAmount}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="text-left mt-8 noPrint">
+            <button
+              onClick={handlePrint}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Print
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

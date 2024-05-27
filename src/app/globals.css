@@ -26,3 +26,9 @@ body {
     rgb(var(--background-start-rgb)); */
     background-color: #f8f8f8;
 }
+
+@media print {
+  .noPrint{
+    display:none;
+  }
+}

@@ -29,6 +29,7 @@ const customerEntrySchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Customer",
       required: true,
+      index: true,
     },
     isDeposit: {
       type: Boolean,
@@ -37,9 +38,16 @@ const customerEntrySchema = new Schema(
     details: {
       type: String,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
   },
   { timestamps: true }
 );
+customerEntrySchema.index({"createdAt": 1});
+customerEntrySchema.index({"updatedAt": 1});
 
 export default mongoose.models.CustomerEntry ||
   mongoose.model("CustomerEntry", customerEntrySchema);

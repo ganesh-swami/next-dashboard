@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import CustomerEntry from "@/models/CustomerEntry";
+import Customer from "@/models/Customer";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/nextAuthConfig";
@@ -18,9 +19,16 @@ export const GET = async (request: Request) => {
             await connect();
             const customerEntries= await CustomerEntry.find({
                 customerId,
+                isDeleted:false,
                 createdAt: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth },
             });
-            return new NextResponse(JSON.stringify(customerEntries?customerEntries : []),
+            const customer = await Customer.findOne({_id:customerId});
+                
+            const result = {
+                customerEntries: customerEntries ? customerEntries : [],
+                customer:customer,
+            };
+            return new NextResponse(JSON.stringify(result),
             { status: 200 });
         } catch (error) {
             return new NextResponse(
@@ -88,3 +96,32 @@ export const POST = async (request: Request) => {
     }
 }
 
+export const PATCH = async (request: Request) => {
+    const session = await getServerSession(authOptions)
+    if(session){
+        try {
+            await connect();
+            const {
+                _id
+            } = await request.json();
+
+            await CustomerEntry.findOneAndUpdate({_id}, {isDeleted:true});
+            return new NextResponse(
+                JSON.stringify({ message: "Customer Entry deleted" }),
+                { status: 200 }
+            );
+        }
+        catch (error) {
+            return new NextResponse(
+                JSON.stringify({ message: "Error while delete" }),
+                { status: 400 }
+            );
+        }
+    }
+    else{
+        return new NextResponse(
+            JSON.stringify({ message: "unAuthorized" }),
+            { status: 401 }
+        );
+    }
+}
