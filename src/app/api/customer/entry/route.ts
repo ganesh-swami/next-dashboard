@@ -20,7 +20,7 @@ export const GET = async (request: Request) => {
             const customerEntries= await CustomerEntry.find({
                 customerId,
                 isDeleted:false,
-                createdAt: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth },
+                date: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth },
             });
             const customer = await Customer.findOne({_id:customerId});
                 
