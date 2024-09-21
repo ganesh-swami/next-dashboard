@@ -71,7 +71,7 @@ export default function CustomerList() {
         <tbody className="bg-white divide-y divide-gray-200">
           {customers.map((customer) => (
             <tr key={customer._id}>
-              <td className="px-4 py-2 whitespace-nowrap">{customer.name}</td>
+              <td className="px-4 py-2 whitespace-nowrap text-black">{customer.name}</td>
               <td className="px-4 py-2 whitespace-nowrap">
                 <button
                   onClick={() => viewCustomerEntry(customer._id)}
@@ -80,8 +80,8 @@ export default function CustomerList() {
                   view
                 </button>
               </td>
-              <td className="px-4 py-2 whitespace-nowrap">{customer.email}</td>
-              <td className="px-4 py-2 whitespace-nowrap">{customer.phone}</td>
+              <td className="px-4 py-2 whitespace-nowrap text-black">{customer.email}</td>
+              <td className="px-4 py-2 whitespace-nowrap text-black">{customer.phone}</td>
               <td className="px-4 py-2 whitespace-nowrap">
                 {customer.details}
               </td>
