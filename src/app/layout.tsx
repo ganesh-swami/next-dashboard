@@ -25,7 +25,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className="container mx-auto">
         <SessionProvider session={session}>
-          <div className="mx-auto max-w-5xl gap-2 mb-10">
+          <div className="mx-auto max-w-5xl gap-2 mb-10 text-black">
             <Navbar />
             {children}
           </div>
