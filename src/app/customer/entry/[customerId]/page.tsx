@@ -152,11 +152,10 @@ export default function CustomerEntries({
         }
         return acc + entry.totalAmount;
       }, 0);
-      const totlNag = entries.reduce((acc,entry)=>{
-        
+      const totlNag = entries.reduce((acc, entry) => {
         return acc + entry.totalItem;
-      },0);
-      console.log("totalNag",totlNag);
+      }, 0);
+      console.log("totalNag", totlNag);
       setRemaingTotalAmount(totalAmount);
       setTotalNag(totlNag);
       // console.log(totalAmount);
@@ -419,20 +418,18 @@ export default function CustomerEntries({
                     colSpan={3}
                     className="px-6 py-2 font-bold border border-slate-200"
                   >
-                    Total Remaining Amount:
+                    Total :{/* Remaining Amount */}
                   </td>
                   <td
                     colSpan={1}
                     className="px-6 py-2 font-bold border border-slate-200"
                   >
-                    
+                    {totalNag}
                   </td>
                   <td
                     colSpan={1}
                     className="px-6 py-2 font-bold border border-slate-200"
-                  >
-                    
-                  </td>
+                  ></td>
                   <td
                     colSpan={2}
                     className="px-4 py-2 font-bold border border-slate-200"
