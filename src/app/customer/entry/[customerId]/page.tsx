@@ -34,6 +34,7 @@ export default function CustomerEntries({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [totalRemaingAmount, setRemaingTotalAmount] = useState(0);
+  const [totalNag, setTotalNag] = useState(0);
   const [addNew, setAddNew] = useState(false);
   const customerId = params.customerId as string;
   const [customer, setCustomer] = useState<Customer>({
@@ -151,7 +152,13 @@ export default function CustomerEntries({
         }
         return acc + entry.totalAmount;
       }, 0);
+      const totlNag = entries.reduce((acc,entry)=>{
+        
+        return acc + entry.totalItem;
+      },0);
+      console.log("totalNag",totlNag);
       setRemaingTotalAmount(totalAmount);
+      setTotalNag(totlNag);
       // console.log(totalAmount);
     }
   }, [entries]);
@@ -409,10 +416,22 @@ export default function CustomerEntries({
                 ))}
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={3}
                     className="px-6 py-2 font-bold border border-slate-200"
                   >
                     Total Remaining Amount:
+                  </td>
+                  <td
+                    colSpan={1}
+                    className="px-6 py-2 font-bold border border-slate-200"
+                  >
+                    
+                  </td>
+                  <td
+                    colSpan={1}
+                    className="px-6 py-2 font-bold border border-slate-200"
+                  >
+                    
                   </td>
                   <td
                     colSpan={2}
