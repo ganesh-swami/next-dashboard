@@ -1,6 +1,7 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+@import "tailwindcss";
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -24,11 +25,11 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb)); */
-    background-color: #f8f8f8;
+  background-color: #f8f8f8;
 }
 
 @media print {
-  .noPrint{
-    display:none;
+  .noPrint {
+    display: none;
   }
 }
