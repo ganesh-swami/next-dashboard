@@ -187,7 +187,7 @@ export default function CustomerEntries({
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-2 md:p-4">
       <h1 className="text-2xl font-bold mb-12 text-center text-gray-700">
         {customer && customer.name ? customer.name : ""}
       </h1>

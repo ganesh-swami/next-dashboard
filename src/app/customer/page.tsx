@@ -64,7 +64,7 @@ export default function CustomerList() {
           onClick={hanldeAddCustomer}
           className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full m-4"
         >
-          Add Customer
+          + Add Customer
         </button>
       </div>
       <table className="min-w-full">
@@ -76,7 +76,7 @@ export default function CustomerList() {
             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               View
             </th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {/* <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Email
             </th>
             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -84,22 +84,25 @@ export default function CustomerList() {
             </th>
             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Details
-            </th>
+            </th> */}
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {customers.map((customer) => (
             <tr key={customer._id}>
-              <td className="px-4 py-2 whitespace-nowrap text-black">
+              <td
+                className="px-4 py-2 whitespace-nowrap text-black cursor-pointer"
+                onClick={() => viewCustomerEntry(customer._id)}
+              >
                 {customer.name}
               </td>
               <td className="px-4 py-2 whitespace-nowrap">
-                <button
+                {/* <button
                   onClick={() => viewCustomerEntry(customer._id)}
                   className="bg-blue-600 text-sm hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full"
                 >
                   view
-                </button>
+                </button> */}
                 <button
                   onClick={() => deleteCustomer(customer._id)}
                   className="bg-red-600 hover:bg-red-800 text-sm text-white font-bold py-2 px-4 rounded-full ml-2"
@@ -124,7 +127,7 @@ export default function CustomerList() {
                   </svg>
                 </button>
               </td>
-              <td className="px-4 py-2 whitespace-nowrap text-black">
+              {/* <td className="px-4 py-2 whitespace-nowrap text-black">
                 {customer.email}
               </td>
               <td className="px-4 py-2 whitespace-nowrap text-black">
@@ -132,7 +135,7 @@ export default function CustomerList() {
               </td>
               <td className="px-4 py-2 whitespace-nowrap">
                 {customer.details}
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

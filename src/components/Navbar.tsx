@@ -24,8 +24,11 @@ const Navbar = () => {
           ) : (
             <>
               {/* {session.user?.email} */}
-              <Link href="/customer" className="p-2 px-5 font-bold">
-                <li>Customers</li>
+              <Link
+                href="/customer"
+                className="p-2 px-5 font-bold text-sky-600 underline"
+              >
+                Customer list
               </Link>
             </>
           )}
