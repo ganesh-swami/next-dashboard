@@ -14,8 +14,8 @@ export const GET = async (request: Request) => {
             const searchMonth: string | null = searchParams.get("month");
             const month: number = searchMonth ? parseInt(searchMonth) : new Date().getMonth() + 1;
             const date = new Date();
-            const startOfCurrentMonth = new Date(date.getFullYear(), month-1, 1);
-            const endOfCurrentMonth = new Date(date.getFullYear(), month, 0);
+            const startOfCurrentMonth = new Date(date.getFullYear()-1, month-1, 1);
+            const endOfCurrentMonth = new Date(date.getFullYear()-1, month, 0);
             await connect();
             const customerEntries= await CustomerEntry.find({
                 customerId,
