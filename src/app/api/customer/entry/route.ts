@@ -8,6 +8,7 @@ import { authOptions } from "@/utils/nextAuthConfig";
 export const GET = async (request: Request) => {
     const session = await getServerSession(authOptions)
     if(session){
+        // new here
         try {
             const { searchParams } = new URL(request.url);
             const customerId = searchParams.get("customerId");
